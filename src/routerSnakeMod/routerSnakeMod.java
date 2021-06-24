@@ -13,6 +13,7 @@ import arc.math.*;
 import arc.util.*;
 import arc.util.Log;
 import arc.struct.Seq;
+import mindustry.mod.*;
 import routerSnake.*;
 
 import static mindustry.Vars.*;
@@ -41,6 +42,21 @@ public class routerSnakeMod extends Plugin{
         });
         Events.run(Trigger.update, () -> {
             snakes.each(s -> s.update());
+        });
+    }
+    public void registerClientCommands(CommandHandler handler){
+        handler.<Player>register("spawnsnake", "<x> <y> <canDie> <length>", "Spawn a router snake.", (args, player) -> {
+            try{
+                if(Integer.parseInt(args[3]) > 100){
+                    player.sendMessage("The specified length is too long.");
+                }else if(!player.admin){
+                    player.sendMessage("You need to be admin to spawn snakes.");
+                }else{
+                    snakes.add(new routerSnake(Float.parseFloat(args[0]) * 8f, Float.parseFloat(args[1]) * 8f, Boolean.parseBoolean(args[2]), Integer.parseInt(args[3])));
+                };
+            }catch(Exception badArguments){
+                player.sendMessage("Invalid arguments.");
+            };
         });
     }
 }
