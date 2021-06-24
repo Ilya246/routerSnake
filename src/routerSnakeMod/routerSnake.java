@@ -66,7 +66,7 @@ public class routerSnake{
             if(Mathf.chance(0.008f)){
                 target = null;
             };
-            if((length > 12 || canDecay) && Mathf.chance(0.0005f * Math.max((float)length, 10))){
+            if((length > 12 || canDecay) && Mathf.chance(0.0003f * Math.max((float)length, 5))){
                 if(length == 1){
                     routerSnakeMod.snakes.remove(this);
                 }else{
@@ -99,7 +99,7 @@ public class routerSnake{
                     x -= Mathf.cosDeg(heading) * 10f;
                     y -= Mathf.sinDeg(heading) * 10f;
                     heading = Mathf.angle(x - newBuild.x, y - newBuild.y);
-                }else if(newBuild.block == Blocks.router && Mathf.chance(0.02f)){
+                }else if(newBuild.block == Blocks.router && Mathf.chance(0.004f * Math.max(length, 12))){
                     if(Mathf.chance(0.005f * length)){
                         routerSnakeMod.snakes.add(new routerSnake(x, y, true, length / 2));
                         length = canDecay ? length / 2 : Math.max(length / 2, 12);
