@@ -42,11 +42,14 @@ public class routerSnake{
         i += Time.delta;
         if(i > 10f){
             Call.label(routerSnakeMod.rout, length / 6f, x, y);
-            float[] oldSegment = segments.get(0);
             segments.remove(0);
-            oldSegment[0] = x;
-            oldSegment[1] = y;
-            segments.add(oldSegment);
+            segments.add(new float[]{x, y});
+            while(segments.size < length){
+                segments.add(new float[]{x, y});
+            };
+            while(segments.size > length){
+                segments.remove(0);
+            };
             if(x > routerSnakeMod.worldWidth){
                 heading = 180f;
             }else if(x < 0f){
@@ -106,11 +109,11 @@ public class routerSnake{
                         while(segments.size > length){
                             segments.remove(0);
                         };
-                        newBuild.kill();
+                        newBuild.damage(30);
                     }else{
                         length++;
                         segments.add(new float[]{x, y});
-                        newBuild.kill();
+                        newBuild.damage(30);
                     };
                 };
             };
