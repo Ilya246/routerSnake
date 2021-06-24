@@ -1,0 +1,7 @@
+{
+  "name": "router snake",
+  "author": "[USMP]Ilya246",
+  "main": "routerSnakeMod.routerSnakeMod",
+  "description": "Adds a router snake to roam your worlds.",
+  "version": 1.0
+}
