@@ -8,7 +8,6 @@ import mindustry.gen.*;
 import mindustry.gen.Iconc;
 import mindustry.content.*;
 import mindustry.world.Tile;
-import mindustry.entities.comp.*;
 import arc.Core.*;
 import arc.math.*;
 import arc.util.*;
@@ -27,6 +26,7 @@ public class routerSnake{
     public Seq<float[]> segments = new Seq<>();
     public int length = 12;
     public boolean canDecay = false;
+    public static float[] tmp = new float[2];
 
     public routerSnake(float x, float y, boolean canDecay, int length){
         this.x = x;
@@ -41,9 +41,15 @@ public class routerSnake{
     public void update(){
         i += Time.delta;
         if(i > 10f){
+            if(length < 1){
+                routerSnakeMod.snakes.remove(this);
+                return;
+            };
             Call.label(routerSnakeMod.rout, length / 6f, x, y);
-            segments.remove(0);
-            segments.add(new float[]{x, y});
+            tmp = segments.remove(0);
+            tmp[0] = x;
+            tmp[1] = y;
+            segments.add(tmp);
             while(segments.size < length){
                 segments.add(new float[]{x, y});
             };
@@ -70,12 +76,8 @@ public class routerSnake{
                 target = null;
             };
             if((length > 12 || canDecay) && Mathf.chance(0.0005f * Math.max((float)length, 10))){
-                if(length == 1){
-                    routerSnakeMod.snakes.remove(this);
-                }else{
-                    length--;
-                    segments.remove(0);
-                };
+                length--;
+                segments.remove(0);
             };
             if(target != null && target.unit().type != null){
                 heading = Mathf.slerp(heading, Mathf.angle(target.x - x, target.y - y), 0.25f);
@@ -98,10 +100,14 @@ public class routerSnake{
             if(newTile != null && newTile.build != null){
                 Building newBuild = newTile.build;
                 if(newBuild.block == Blocks.distributor){
-                    newBuild.damage(40f * (float)length / 12f);
+                    newBuild.damage(Math.min(40f * (float)length / 12f, 80f));
                     x -= Mathf.cosDeg(heading) * 10f;
                     y -= Mathf.sinDeg(heading) * 10f;
                     heading = Mathf.angle(x - newBuild.x, y - newBuild.y);
+                    if(Mathf.chance(0.02f * length)){
+                        length++;
+                        segments.add(new float[]{x, y});
+                    };
                 }else if(newBuild.block == Blocks.router && Mathf.chance((length < 10 && length != 0) ? 0.5f / length : 0.05f)){
                     if(Mathf.chance(0.005f * length)){
                         routerSnakeMod.snakes.add(new routerSnake(x, y, true, length / 2));
