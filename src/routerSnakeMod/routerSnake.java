@@ -71,8 +71,7 @@ public class routerSnake{
             y += Mathf.sinDeg(heading) * 10f;
             if(Mathf.chance(0.008f) && Groups.player.size() > 0){
                 target = Groups.player.index(Mathf.random(Groups.player.size() - 1));
-            };
-            if(Mathf.chance(0.008f)){
+            } else if(Mathf.chance(0.008f)){
                 target = null;
             };
             if((length > 12 || canDecay) && Mathf.chance(0.0005f * Math.max((float)length, 10))){
@@ -100,7 +99,7 @@ public class routerSnake{
             if(newTile != null && newTile.build != null){
                 Building newBuild = newTile.build;
                 if(newBuild.block == Blocks.distributor){
-                    newBuild.damage(Math.min(40f * (float)length / 12f, 80f));
+                    newBuild.damage(Math.min(40f * (float)length / 12f, 79f));
                     x -= Mathf.cosDeg(heading) * 10f;
                     y -= Mathf.sinDeg(heading) * 10f;
                     heading = Mathf.angle(x - newBuild.x, y - newBuild.y);
@@ -109,17 +108,17 @@ public class routerSnake{
                         segments.add(new float[]{x, y});
                     };
                 }else if(newBuild.block == Blocks.router && Mathf.chance((length < 10 && length != 0) ? 0.5f / length : 0.05f)){
-                    if(Mathf.chance(0.005f * length)){
+                    if(Mathf.chance(0.01f * length)){
                         routerSnakeMod.snakes.add(new routerSnake(x, y, true, length / 2));
                         length = canDecay ? length / 2 : Math.max(length / 2, 12);
                         while(segments.size > length){
                             segments.remove(0);
                         };
-                        newBuild.damage(30);
+                        newBuild.damage(19);
                     }else{
                         length++;
                         segments.add(new float[]{x, y});
-                        newBuild.damage(30);
+                        newBuild.damage(19);
                     };
                 };
             };
