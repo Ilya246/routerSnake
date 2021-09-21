@@ -47,8 +47,8 @@ public class routerSnakeMod extends Plugin{
     public void registerClientCommands(CommandHandler handler){
         handler.<Player>register("spawnsnake", "<x> <y> <canDie> <length>", "Spawn a router snake.", (args, player) -> {
             try{
-                if(Integer.parseInt(args[3]) > 100){
-                    player.sendMessage("The specified length is too long.");
+                if(Integer.parseInt(args[3]) > 100 || Integer.parseInt(args[3]) < 1){
+                    player.sendMessage("The specified length is invalid.");
                 }else if(!player.admin){
                     player.sendMessage("You need to be admin to spawn snakes.");
                 }else{
