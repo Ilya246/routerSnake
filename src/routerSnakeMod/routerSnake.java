@@ -121,7 +121,7 @@ public class routerSnake{
                     newBuild.damage(routerSnakeMod.baseRouterDmg);
                 };
             };
-            i -= 10f;
+            i -= routerSnakeMod.snakeUpdateDelay;
         };
     }
 }
